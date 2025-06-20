@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/* This file defines the color palette for the entire application using CSS variables.
+  We define a set of variables for the default light theme, and then override 
+  them when the 'html' tag has the 'dark' class applied.
+*/
+
+:root {
+  /* Light Theme Palette */
+  --background: #f8f8f8;          /* Page background */
+  --foreground: #111827;          /* Main text color */
+  --foreground-subtle: #6b7280;   /* Lighter text for descriptions */
+  
+  --card-background: #ffffff;     /* Background for cards, inputs, etc. */
+  --card-border: #e5e7eb;          /* Border for cards and inputs */
+  
+  --nav-background: #ffffff;      /* Background for nav/sidebars */
+  --nav-border: #e5e7eb;           /* Border for nav/sidebars */
+  
+  --button-primary-bg: #0070f3;    /* Primary button background */
+  --button-primary-text: #ffffff;   /* Primary button text */
+
+  --button-danger-bg: #f44336;     /* Danger button background */
+  --button-danger-text: #ffffff;    /* Danger button text */
+  
+  --button-secondary-bg: #ffffff;   /* Secondary button background */
+  --button-secondary-text: #111827; /* Secondary button text */
+  --button-secondary-border: #e5e7eb;
+
+  --chat-bubble-user-bg: #e1ffc7;   /* Background for user's chat bubble */
+  --chat-bubble-dao-bg: #ffffff;    /* Background for dao's chat bubble */
+}
+
+html.dark {
+  /* Dark Theme Palette - Black/Brown Gray (Stone) */
+  --background: #1c1917;          /* A very dark, warm gray (stone-900) */
+  --foreground: #fafaf9;          /* Off-white for text (stone-50) */
+  --foreground-subtle: #a8a29e;   /* Muted warm gray for secondary text (stone-400) */
+  
+  --card-background: #292524;     /* Dark stone for cards (stone-800) */
+  --card-border: #44403c;          /* Lighter stone for borders (stone-700) */
+  
+  --nav-background: #292524;      /* Sidebar background, same as card */
+  --nav-border: #44403c;           /* Sidebar border, same as card */
+  
+  --button-primary-bg: #3b82f6;    /* A standard blue for primary actions (blue-500) */
+  --button-primary-text: #ffffff;
+  
+  --button-danger-bg: #ef4444;     /* A standard red for danger (red-500) */
+  --button-danger-text: #ffffff;
+  
+  --button-secondary-bg: #44403c;   /* A darker stone for secondary buttons (stone-700) */
+  --button-secondary-text: #fafaf9;
+  --button-secondary-border: #57534e; /* (stone-600) */
+
+  --chat-bubble-user-bg: #059669;   /* A rich green for user chat (emerald-600) */
+  --chat-bubble-dao-bg: #44403c;    /* Dao chat bubble matches secondary buttons */
+}
+
+
+/* Base body styles using the variables */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}

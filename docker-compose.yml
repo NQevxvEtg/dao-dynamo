@@ -1,0 +1,73 @@
+# dao/docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: ankane/pgvector:latest
+    restart: always
+    env_file: ./.env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp=unconfined      
+    restart: "no"
+    env_file: ./.env
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}"
+      DATA_DIR: ${DATA_DIR:-/app/data}
+      SENTENCE_TRANSFORMERS_HOME: /app/cache/sentence_transformers
+      HF_HOME: /app/cache/huggingface
+      # PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+      - ./models:/app/models
+      - ./data:/app/data
+      - ./.env:/app/.env
+      - ./cache:/app/cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    runtime: nvidia
+    command: gdb -batch -ex 'run' -ex 'bt' --args python3 -m uvicorn src.main:app --host 0.0.0.0 --port 8000
+
+
+  frontend:
+    build:
+      context: ./dao-frontend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./dao-frontend:/app
+      - frontend_node_modules:/app/node_modules
+      - frontend_next_data:/app/.next
+    command: npm run dev
+
+volumes:
+  db_data:
+  frontend_node_modules:
+  frontend_next_data:

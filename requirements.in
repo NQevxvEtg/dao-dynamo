@@ -1,0 +1,12 @@
+# pip install pip-tools
+# pip-compile requirements.in 
+
+fastapi
+uvicorn[standard]
+pydantic-settings
+psycopg2-binary
+transformers
+sentence-transformers
+langchain-community
+omegaconf
+accelerate
